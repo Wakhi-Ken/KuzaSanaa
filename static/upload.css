@@ -1,0 +1,135 @@
+:root {
+  --brown-dark: #4b2e05;        /* dark brown */
+  --brown-medium: #7f551a;      /* medium brown */
+  --brown-light: #c8a165;       /* light brown */
+  --cream-light: #f7f1e1;       /* cream/light beige */
+  --text-color: #3b2f2f;        /* dark text */
+  --accent-color: #7f551a;      /* accent medium brown */
+  --background: var(--cream-light);
+  --border-radius: 0.75rem;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-color);
+  margin: 0;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-image: url('https://img.freepik.com/premium-photo/banner-with-beautiful-black-woman-female-portrait-young-african-american-with-beautiful-face_972324-69975.jpg?semt=ais_hybrid&w=740');
+  background-size: cover;         /* Make sure image covers entire viewport */
+  background-position: center;    /* Center the image */
+  background-repeat: no-repeat;   /* Don't repeat the image */
+  background-attachment: fixed;   /* Fix the background while scrolling */
+  /* Optional: add a fallback background color */
+  background-color: #d7b899;      /* light brown as fallback */
+}
+
+.upload-form-wrapper {
+  max-width: 440px;
+  width: 100%;
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 2.5rem 2rem;
+  box-shadow: 0 6px 20px var(--shadow-color);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.upload-form-wrapper h1 {
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--brown-dark);
+  margin-bottom: 1.75rem;
+  user-select: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+label.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+
+input[type="file"] {
+  padding: 0.8rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1.8px solid var(--brown-medium);
+  background-color: var(--cream-light);
+  color: var(--brown-dark);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+}
+
+input[type="file"]:hover,
+input[type="file"]:focus {
+  border-color: var(--brown-dark);
+  box-shadow: 0 0 12px var(--brown-medium);
+  outline: none;
+  background-color: #fff3d1;
+}
+
+small#fileHelp {
+  font-size: 0.85rem;
+  color: var(--brown-medium);
+  display: block;
+  margin-top: -0.8rem;
+  margin-bottom: 1.3rem;
+  user-select: none;
+}
+
+button[type="submit"] {
+  background-color: var(--brown-dark);
+  color: var(--cream-light);
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 0.9rem 0;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(75, 46, 5, 0.5);
+  transition: background-color 0.3s ease, transform 0.25s ease;
+  user-select: none;
+}
+
+button[type="submit"]:hover,
+button[type="submit"]:focus {
+  background-color: var(--brown-medium);
+  transform: scale(1.05);
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .upload-form-wrapper {
+    padding: 2rem 1.5rem;
+  }
+
+  .upload-form-wrapper h1 {
+    font-size: 1.75rem;
+  }
+
+  input[type="file"] {
+    font-size: 0.95rem;
+  }
+
+  button[type="submit"] {
+    font-size: 1.05rem;
+  }
+}

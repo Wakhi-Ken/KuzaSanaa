@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}KuzaSanaa | Login{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="login-container">
+    <div class="circle circle-one"></div>
+    <div class="circle circle-two"></div>
+
+    <div class="form-container">
+      <h1>Welcome back to <span style="color: var(--accent-color);">KuzaSanaa</span>!</h1>
+      <p class="opacity">Empowering creatives. Celebrating culture. Log in to join the journey.</p>
+
+      <form action="{{ url_for('login') }}" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+
+        <div class="password-row">
+          <input type="password" name="password" placeholder="Password" id="password" required>
+          <button type="button" id="togglePassword" aria-label="Show or hide password">Show</button>
+        </div>
+
+        <div class="register-forget">
+          <a href="{{ url_for('register') }}">Register</a>
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+
+  togglePassword.addEventListener('click', function () {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.textContent = type === 'password' ? 'Show' : 'Hide';
+  });
+</script>
+{% endblock %}

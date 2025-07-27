@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}KuzaSanaa | Campaigns{% endblock %}
+
+{% block content %}
+<section class="media-section">
+  <h2 class="section-title">Cultural Campaigns</h2>
+
+  <div class="media-grid">
+    {% for item in campaigns %}
+      <div class="media-card">
+        {% if item.media_type == 'video' %}
+          <video controls class="media-preview">
+            <source src="{{ url_for('static', filename='uploads/' ~ item.file_path) }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% elif item.media_type == 'image' %}
+          <img src="{{ url_for('static', filename='uploads/' ~ item.file_path) }}" alt="{{ item.title }}" class="media-preview">
+        {% elif item.media_type == 'text' %}
+          <div class="text-preview">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description[:200] }}{% if item.description|length > 200 %}...{% endif %}</p>
+          </div>
+        {% endif %}
+
+        <div class="media-info">
+          <h3>{{ item.title }}</h3>
+          {% if item.description and item.media_type != 'text' %}
+            <p class="media-description">{{ item.description[:100] }}{% if item.description|length > 100 %}...{% endif %}</p>
+          {% endif %}
+          <p><strong>Uploaded by:</strong> {{ item.uploader.Username }} ({{ item.uploader.Role }})</p>
+          <p class="upload-date">{{ item.upload_date.strftime('%B %d, %Y') }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p>No campaigns uploaded yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

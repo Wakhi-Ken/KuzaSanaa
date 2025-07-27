@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Join MUS-HUB{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="register-container">
+    <div class="circle circle-one"></div>
+    <div class="circle circle-two"></div>
+
+    <div class="form-container" role="main" aria-label="User Registration Form">
+      <h1>Welcome to <span class="highlight">MUS-HUB</span></h1>
+      <p class="opacity">
+        🎨 <strong>KuzaSanaa </strong> is the vibrant platform where <strong>creative talents and culture enthusiasts come together</strong>.  
+        Showcase your artistry, share cultural stories, and engage with a community passionate about arts, heritage, and digital media.  
+        Whether you’re a cultural strategist, artist, or admirer, <em>this is your stage to inspire and be inspired</em>.        
+      </p>
+
+      <form method="POST" action="{{ url_for('register') }}" novalidate>
+        <label for="register-username" class="sr-only">Username</label>
+        <input type="text" id="register-username" name="username" placeholder="Username" required aria-required="true" aria-describedby="usernameHelp">
+
+        <label for="register-email" class="sr-only">Email address</label>
+        <input type="email" id="register-email" name="email" placeholder="Email" required aria-required="true" aria-describedby="emailHelp">
+
+        <div class="password-row">
+          <label for="register-password" class="sr-only">Password</label>
+          <input type="password" id="register-password" name="password" placeholder="Password" required aria-required="true" aria-describedby="passwordHelp">
+          <button type="button" id="togglePassword" aria-label="Show or hide password" class="toggle-password-btn">Show</button>
+        </div>
+        <div id="password-strength" aria-live="polite" role="status"></div>
+
+        <div class="password-row">
+          <label for="confirm-password" class="sr-only">Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required aria-required="true" aria-describedby="confirmPasswordHelp">
+          <button type="button" id="toggleConfirmPassword" aria-label="Show or hide confirm password" class="toggle-password-btn">Show</button>
+        </div>
+
+        <label for="register-role">Select your role</label>
+        <select id="register-role" name="role" required aria-required="true" aria-describedby="roleHelp">
+          <option value="" disabled selected>Select your role</option>
+          <!-- Kuza roles -->
+          <option value="Cultural Strategist">Cultural Strategist</option>
+          <option value="Cultural Ambassador">Cultural Ambassador</option>
+          <option value="Tourism Promoter">Tourism Promoter</option>
+          <option value="Artist">Artist</option>
+          <option value="Visual Designer">Visual Designer</option>
+          <option value="Crafts Maker">Crafts Maker</option>
+          <option value="Performer">Performer</option>
+          <option value="Traditional Dancer">Traditional Dancer</option>
+          <option value="Storyteller">Storyteller</option>
+          <option value="Documentary Producer">Documentary Producer</option>
+          <option value="Podcast Host">Podcast Host</option>
+          <option value="Digital Campaign Manager">Digital Campaign Manager</option>
+          <option value="Content Creator">Content Creator</option>
+          <option value="Exhibition Curator">Exhibition Curator</option>
+          <option value="Event Organizer">Event Organizer</option>
+          <option value="Cultural Educator">Cultural Educator</option>
+          <option value="Community Organizer">Community Organizer</option>
+          <option value="Supporter">Supporter</option>
+          <option value="Enthusiast">Enthusiast</option>
+        </select>
+
+        <div class="register-forget" style="margin-top:1rem;">
+          <a href="{{ url_for('login') }}">Already have an account? Login</a>
+        </div>
+
+        <button type="submit">Create Profile</button>
+      </form>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes" role="alert">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('register-password');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+
+    toggleConfirmPassword.addEventListener('click', () => {
+      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordInput.setAttribute('type', type);
+      toggleConfirmPassword.textContent = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    // Password strength checker
+    const strengthText = document.getElementById('password-strength');
+    passwordInput.addEventListener('input', () => {
+      const val = passwordInput.value;
+      let strength = '';
+      if(val.length < 6) {
+        strength = 'Too short';
+        strengthText.style.color = '#ff3e36';
+      } else if(val.match(/[A-Z]/) && val.match(/[0-9]/) && val.length >= 8) {
+        strength = 'Strong password';
+        strengthText.style.color = '#4CAF50';
+      } else {
+        strength = 'Weak password, include uppercase letters and numbers';
+        strengthText.style.color = '#ff9800';
+      }
+      strengthText.textContent = val ? strength : '';
+    });
+  });
+</script>
+{% endblock %}
+
+

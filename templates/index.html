@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}KuzaSanaa | Home{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    .icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      vertical-align: middle;
+      margin-right: 6px;
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+    .icon.animate {
+      animation: iconBounce 0.5s ease forwards;
+    }
+    @keyframes iconBounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px) scale(1.2); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .uploaded-image {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      margin-top: 10px;
+      transition: transform 0.3s ease;
+    }
+    .uploaded-image:hover {
+      transform: scale(1.02);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="image-overlay"></div>
+
+<div class="container">
+  {% if 'user_id' in session %}
+    <h2>Welcome, {{ username }}!</h2>
+    <a href="{{ url_for('profile') }}" class="profile-link" aria-label="Go to your profile">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </svg>
+      Go to Profile
+    </a>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes" role="alert">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <h2>Latest Uploads</h2>
+    {% for content in contents %}
+      <div class="upload" role="region" aria-labelledby="upload-title-{{ content.ContentID }}">
+        <p><strong>By:</strong> 
+          <a href="{{ url_for('public_profile', user_id=content.user.UserID) }}">
+            {{ content.user.Username }}
+          </a>
+        </p>
+        <p><strong>Uploaded:</strong> {{ content.UploadDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p><strong>File:</strong> {{ content.FilePath }}</p>
+
+        {% set ext = content.FilePath.split('.')[-1].lower() %}
+        {% if ext in ['mp3', 'wav', 'ogg'] %}
+          <audio controls>
+            <source src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" type="audio/{{ ext }}">
+            Your browser does not support audio playback.
+          </audio>
+        {% elif ext in ['mp4', 'webm'] %}
+          <video controls width="360" aria-labelledby="upload-title-{{ content.ContentID }}">
+            <source src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" type="video/{{ ext }}">
+            Your browser does not support video playback.
+          </video>
+        {% elif ext in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
+          <img src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}"
+               alt="Image uploaded by {{ content.user.Username }}"
+               class="uploaded-image" />
+        {% else %}
+          <p>Preview not available for this file type.</p>
+        {% endif %}
+
+        <button 
+          aria-expanded="false" 
+          aria-controls="comments-{{ content.ContentID }}" 
+          onclick="toggleComments('comments-{{ content.ContentID }}', this)" 
+          class="comments-toggle">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v14l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+          </svg>
+          Comments
+        </button>
+
+        <div id="comments-{{ content.ContentID }}" class="comment-section" style="display: none;">
+          <h4 id="upload-title-{{ content.ContentID }}">Comments:</h4>
+          <ul>
+            {% for comment in content.comments %}
+              <li>
+                <strong>
+                  <a href="{{ url_for('public_profile', user_id=comment.user.UserID) }}">
+                    {{ comment.user.Username }}
+                  </a>
+                </strong>:
+                {% if (current_user_id == comment.UserID) and ((now - comment.CommentDate).total_seconds() < 30) %}
+                  <form action="{{ url_for('edit_comment', comment_id=comment.CommentID) }}" method="POST" style="display:inline;">
+                    <input type="text" name="comment_text" value="{{ comment.CommentText }}" aria-label="Edit comment">
+                    <button type="submit">Update</button>
+                  </form>
+                {% else %}
+                  {{ comment.CommentText }}
+                {% endif %}
+                <small>({{ comment.CommentDate.strftime('%Y-%m-%d %H:%M:%S') }})</small>
+              </li>
+            {% endfor %}
+          </ul>
+
+          <form action="{{ url_for('add_comment', content_id=content.ContentID) }}" method="POST">
+            <textarea name="comment_text" placeholder="Leave a comment..." required aria-label="Leave a comment"></textarea>
+            <button type="submit" class="submit-comment-btn">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+              </svg>
+              Submit Comment
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+
+    <script>
+      function toggleComments(id, btn) {
+        const section = document.getElementById(id);
+        const isHidden = section.style.display === "none";
+        section.style.display = isHidden ? "block" : "none";
+        btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
+
+        const icon = btn.querySelector('.icon');
+        if(icon) {
+          icon.classList.remove('animate');
+          void icon.offsetWidth;
+          icon.classList.add('animate');
+        }
+      }
+
+      document.querySelectorAll('.submit-comment-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const icon = btn.querySelector('.icon');
+          if(icon) {
+            icon.classList.remove('animate');
+            void icon.offsetWidth;
+            icon.classList.add('animate');
+          }
+        });
+      });
+
+      const profileLink = document.querySelector('.profile-link');
+      if(profileLink) {
+        const icon = profileLink.querySelector('.icon');
+        profileLink.addEventListener('mouseenter', () => icon?.classList.add('animate'));
+        profileLink.addEventListener('mouseleave', () => icon?.classList.remove('animate'));
+        profileLink.addEventListener('focus', () => icon?.classList.add('animate'));
+        profileLink.addEventListener('blur', () => icon?.classList.remove('animate'));
+      }
+    </script>
+
+  {% else %}
+    <section class="web-summary" role="region" aria-label="About KuzaSanaa">
+      <p>
+        🎨 <strong>KuzaSanaa </strong> is the vibrant platform where <strong>creative talents and culture enthusiasts come together</strong>.  
+Showcase your artistry, share cultural stories, and engage with a community passionate about arts, heritage, and digital media.  
+Whether you’re a cultural strategist, artist, or admirer, <em>this is your stage to inspire and be inspired</em>.
+      </p>
+    </section>
+  {% endif %}
+</div>
+
+{% endblock %}

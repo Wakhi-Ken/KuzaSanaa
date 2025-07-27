@@ -1,0 +1,159 @@
+/* login.css */
+body {
+  background-image: url('https://img.freepik.com/premium-photo/banner-with-beautiful-black-woman-female-portrait-young-african-american-with-beautiful-face_972324-69975.jpg?semt=ais_hybrid&w=740');
+  background-size: cover;         /* Make sure image covers entire viewport */
+  background-position: center;    /* Center the image */
+  background-repeat: no-repeat;   /* Don't repeat the image */
+  background-attachment: fixed;   /* Fix the background while scrolling */
+  /* Optional: add a fallback background color */
+  background-color: #d7b899;      /* light brown as fallback */
+}
+.container {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 1rem;
+  font-family: 'Poppins', sans-serif;
+  color: #4b2e05;
+}
+
+.login-container {
+  position: relative;
+  background: #d7b899;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(75, 46, 5, 0.3);
+  overflow: hidden;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.circle-one {
+  width: 160px;
+  height: 160px;
+  background: #7f5f3b;
+  top: -60px;
+  right: -60px;
+}
+
+.circle-two {
+  width: 120px;
+  height: 120px;
+  background: #4b2e05;
+  bottom: -40px;
+  left: -40px;
+}
+
+.form-container h1 {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #4b2e05;
+}
+
+.form-container p.opacity {
+  opacity: 0.7;
+  margin-bottom: 1.8rem;
+  font-size: 1rem;
+}
+
+form input[type="text"],
+form input[type="password"] {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1.1rem;
+  border: 1.5px solid #7f5f3b;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+  border-color: #4b2e05;
+  outline: none;
+}
+
+.password-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.password-row input {
+  flex-grow: 1;
+}
+
+.password-row button {
+  background: #7f5f3b;
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  color: #f7f0e9;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.password-row button:hover,
+.password-row button:focus {
+  background: #4b2e05;
+  outline: none;
+}
+
+.register-forget {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.register-forget a {
+  color: #4b2e05;
+  text-decoration: underline;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.register-forget a:hover,
+.register-forget a:focus {
+  color: #7f5f3b;
+  outline: none;
+}
+
+form button[type="submit"] {
+  width: 100%;
+  padding: 0.8rem 0;
+  background: #7f5f3b;
+  border: none;
+  color: #f7f0e9;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover,
+form button[type="submit"]:focus {
+  background: #4b2e05;
+  outline: none;
+}
+
+.flashes {
+  margin-top: 1rem;
+  background-color: #7f5f3b;
+  color: #f7f0e9;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  list-style: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1.2rem;
+  }
+}

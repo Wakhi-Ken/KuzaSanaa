@@ -1,0 +1,115 @@
+:root {
+  --brown-dark: #4b2e05;        /* dark brown */
+  --brown-medium: #7f551a;      /* medium brown */
+  --brown-light: #c8a165;       /* light brown */
+  --cream-light: #f7f1e1;       /* cream/light beige */
+  --text-color: #3b2f2f;        /* dark text */
+  --accent-color: #7f551a;      /* accent same as medium brown */
+  --background: var(--cream-light);
+  --border-radius: 0.75rem;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-color);
+  margin: 0;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-image: url('https://img.freepik.com/premium-photo/banner-with-beautiful-black-woman-female-portrait-young-african-american-with-beautiful-face_972324-69975.jpg?semt=ais_hybrid&w=740');
+  background-size: cover;         /* Make sure image covers entire viewport */
+  background-position: center;    /* Center the image */
+  background-repeat: no-repeat;   /* Don't repeat the image */
+  background-attachment: fixed;   /* Fix the background while scrolling */
+  /* Optional: add a fallback background color */
+  background-color: #d7b899;      /* light brown as fallback */
+}
+
+.public-profile-container {
+  max-width: 720px;
+  width: 100%;
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 2rem 2.5rem;
+  box-shadow: 0 6px 20px var(--shadow-color);
+  box-sizing: border-box;
+}
+
+.public-header {
+  font-weight: 700;
+  font-size: 2.25rem;
+  color: var(--brown-dark);
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid var(--brown-medium);
+  padding-bottom: 0.5rem;
+  user-select: none;
+}
+
+.uploads-section h3 {
+  color: var(--brown-medium);
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  user-select: none;
+}
+
+.uploads-section p {
+  font-style: italic;
+  color: var(--brown-dark);
+  opacity: 0.8;
+  margin: 0.75rem 0 1.5rem 0;
+}
+
+.uploads-section ul {
+  list-style: none;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.uploads-section ul ul {
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+  border-left: 2px solid var(--brown-light);
+  padding-left: 1rem;
+}
+
+.uploads-section li {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+}
+
+.accent-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.accent-link:hover,
+.accent-link:focus {
+  color: var(--brown-dark);
+  text-decoration: underline;
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .public-profile-container {
+    padding: 1.5rem 1.5rem;
+  }
+
+  .public-header {
+    font-size: 1.8rem;
+  }
+
+  .uploads-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .uploads-section li {
+    font-size: 0.95rem;
+  }
+}

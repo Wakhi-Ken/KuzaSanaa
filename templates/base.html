@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}KuzaSanaa{% endblock %}</title>
+
+  <!-- Global base styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+  
+  <!-- Expose login status to JS -->
+  <script>
+    window.isUserLoggedIn = {{ 'true' if 'user_id' in session else 'false' }};
+  </script>
+
+  <!-- Page-specific styles -->
+  {% block extra_css %}{% endblock %}
+
+  <style>
+    /* Style to keep logo link neat */
+    .logo a {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .logo a:hover,
+    .logo a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo"><a href="/">KuzaSanaa</a></h1>
+
+      <!-- Hamburger button -->
+      <div class="hamburger" id="hamburger" aria-label="Toggle navigation" tabindex="0" role="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav>
+        <ul class="nav-list {% if 'user_id' in session %}js-hidden{% endif %}" id="nav-list">
+          {% if 'user_id' in session %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/campaigns">Campaigns</a></li>
+            <li><a href="/media">Podcasts & Docs</a></li>
+            <li><a href="/upload">Upload</a></li>
+            <li><a href="{{ url_for('profile') }}">My Profile</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li class="search-container" id="search-container" tabindex="0" role="button" aria-label="Toggle search">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.14 5.59 12.53 3 9.25 3S3.36 5.59 3.36 8.39c0 2.79 2.6 5.39 5.89 5.39 1.31 0 2.5-.51 3.38-1.34l.27.28v.79l4.25 4.25 1.5-1.5-4.25-4.25zm-6.25 0c-1.8 0-3.25-1.45-3.25-3.25S7.45 7.5 9.25 7.5 12.5 8.95 12.5 10.75 11.05 14 9.25 14z"/>
+              </svg>
+              <input
+                type="text"
+                id="search-input"
+                name="q"
+                placeholder="Search artists or stories..."
+                aria-label="Search"
+                autocomplete="off"
+                onkeydown="if(event.key === 'Enter'){ performSearch(); }"
+              />
+            </li>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 KuzaSanaa — Empowering Culture Digitally</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navList = document.getElementById('nav-list');
+      if (window.isUserLoggedIn === true || window.isUserLoggedIn === 'true') {
+        navList.classList.remove('js-hidden');
+        navList.classList.add('js-visible');
+      }
+    });
+
+    const hamburger = document.getElementById('hamburger');
+    const navList = document.getElementById('nav-list');
+    const searchContainer = document.getElementById('search-container');
+    const searchInput = document.getElementById('search-input');
+
+    function toggleMenu() {
+      navList.classList.toggle('active');
+      hamburger.classList.toggle('active');
+      if (searchInput && searchInput.style.display === 'block') {
+        searchInput.style.display = 'none';
+      }
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    hamburger.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') toggleMenu();
+    });
+
+    document.querySelectorAll('.nav-list a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navList.classList.contains('active')) toggleMenu();
+      });
+    });
+
+    if (searchContainer) {
+      searchContainer.addEventListener('click', () => {
+        if (searchInput.style.display === 'block') {
+          searchInput.style.display = 'none';
+        } else {
+          searchInput.style.display = 'block';
+          searchInput.focus();
+        }
+      });
+
+      searchContainer.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (searchInput.style.display === 'block') {
+            searchInput.style.display = 'none';
+          } else {
+            searchInput.style.display = 'block';
+            searchInput.focus();
+          }
+        }
+      });
+    }
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query.length > 0) {
+        window.location.href = `/search?q=${encodeURIComponent(query)}`;
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        if (searchInput) searchInput.style.display = 'none';
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
+

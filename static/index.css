@@ -1,0 +1,227 @@
+/* index.css */
+body {
+  background-image: url('https://img.freepik.com/premium-photo/banner-with-beautiful-black-woman-female-portrait-young-african-american-with-beautiful-face_972324-69975.jpg?semt=ais_hybrid&w=740');
+  background-size: cover;         /* Make sure image covers entire viewport */
+  background-position: center;    /* Center the image */
+  background-repeat: no-repeat;   /* Don't repeat the image */
+  background-attachment: fixed;   /* Fix the background while scrolling */
+  /* Optional: add a fallback background color */
+  background-color: #d7b899;      /* light brown as fallback */
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: 'Poppins', sans-serif;
+  color: #4b2e05; /* dark brown */
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #7f5f3b; /* medium brown */
+  font-weight: 600;
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  color: #7f5f3b;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+.profile-link:hover,
+.profile-link:focus {
+  color: #4b2e05;
+  outline: none;
+}
+
+.upload {
+  background: #d7b899; /* light brown */
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(75, 46, 5, 0.15);
+}
+
+.upload p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+.upload a {
+  color: #4b2e05;
+  text-decoration: underline;
+}
+
+.upload a:hover,
+.upload a:focus {
+  color: #7f5f3b;
+  outline: none;
+}
+
+/* Fixed size for media players and images inside uploads */
+.upload audio,
+.upload video {
+  width: 360px;           /* fixed width */
+  max-width: 100%;        /* responsive on small screens */
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(75, 46, 5, 0.2);
+  outline-offset: 2px;
+  outline: none;
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.upload img.uploaded-image {
+  width: 360px;          /* fixed width */
+  max-width: 100%;       /* responsive */
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 14px rgba(75, 46, 5, 0.35);
+  margin-top: 0.8rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.upload img.uploaded-image:hover,
+.upload img.uploaded-image:focus {
+  transform: scale(1.04);
+  box-shadow: 0 0 24px rgba(75, 46, 5, 0.5);
+  outline: none;
+}
+
+.comments-toggle {
+  background: var(--brown-medium, #7f5f3b);
+  border: none;
+  color: #f7f0e9;
+  padding: 0.4rem 0.8rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.comments-toggle:hover,
+.comments-toggle:focus {
+  background: var(--brown-dark, #4b2e05);
+  outline: none;
+}
+
+.comment-section {
+  margin-top: 0.8rem;
+  padding-left: 1rem;
+  border-left: 3px solid #7f5f3b;
+  font-size: 0.9rem;
+  background: #f4e9d3;
+  border-radius: 6px;
+}
+
+.comment-section h4 {
+  margin-bottom: 0.6rem;
+  color: #4b2e05;
+}
+
+.comment-section ul {
+  list-style-type: disc;
+  padding-left: 1.2rem;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 0.8rem;
+}
+
+.comment-section li {
+  margin-bottom: 0.5rem;
+}
+
+.comment-section a {
+  color: #7f5f3b;
+  text-decoration: underline;
+}
+
+.comment-section a:hover,
+.comment-section a:focus {
+  color: #4b2e05;
+  outline: none;
+}
+
+.comment-section small {
+  color: #5a3f1a;
+}
+
+.comment-section textarea {
+  width: 100%;
+  min-height: 60px;
+  border-radius: 6px;
+  border: 1px solid #7f5f3b;
+  padding: 0.4rem 0.6rem;
+  font-family: 'Poppins', sans-serif;
+  resize: vertical;
+  margin-bottom: 0.5rem;
+}
+
+.comment-section button.submit-comment-btn {
+  background: #7f5f3b;
+  border: none;
+  color: #f7f0e9;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background-color 0.3s ease;
+}
+
+.comment-section button.submit-comment-btn:hover,
+.comment-section button.submit-comment-btn:focus {
+  background: #4b2e05;
+  outline: none;
+}
+
+/* Accessibility */
+.icon {
+  fill: #7f5f3b;
+  transition: transform 0.3s ease;
+}
+
+.icon.animate {
+  animation: iconBounce 0.5s ease forwards;
+}
+
+@keyframes iconBounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px) scale(1.2); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* Web summary for logged-out users */
+.web-summary {
+  background: #d7b899;
+  padding: 2rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #4b2e05;
+  max-width: 700px;
+  margin: 3rem auto;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .upload audio,
+  .upload video,
+  .upload img.uploaded-image {
+    width: 100%;       /* full container width on mobile */
+  }
+}

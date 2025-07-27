@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}{{ user.Username }}'s Profile | KuzaSanaa{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+  <!-- Header -->
+  <div class="profile-header">
+    <h1>{{ user.Username }}'s Profile</h1>
+  </div>
+
+  <!-- Profile Info Section -->
+  <div class="profile-section">
+
+    <!-- Profile Picture -->
+    <div class="profile-photo">
+      {% if user.ProfilePicture %}
+        <img src="{{ url_for('static', filename='profile_pics/' ~ user.ProfilePicture) }}" alt="Profile Picture">
+      {% else %}
+        <img src="{{ url_for('static', filename='default-avatar.png') }}" alt="Default Avatar">
+      {% endif %}
+    </div>
+
+    <!-- Email and Bio -->
+    <div class="info-group">
+      <p><strong>Email:</strong> {{ user.Email }}</p>
+    </div>
+
+    <div class="info-group">
+      <h3>Bio</h3>
+      {% if user.Bio %}
+        <p class="bio-text">{{ user.Bio }}</p>
+      {% else %}
+        <p class="bio-text"><em>No bio set yet.</em></p>
+      {% endif %}
+    </div>
+
+    <!-- Bio Update Form -->
+    <form action="{{ url_for('profile') }}" method="POST">
+      <textarea name="bio" placeholder="Write something about yourself...">{{ user.Bio or '' }}</textarea>
+      <button type="submit">Update Bio</button>
+    </form>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+  </div>
+
+  <!-- Comments Section -->
+  <div class="profile-section">
+    <h3>Your Comments</h3>
+    <ul class="comment-list">
+      {% for comment in user.comments %}
+        <li>
+          <p>{{ comment.CommentText }}</p>
+          <small>{{ comment.CommentDate.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+        </li>
+      {% else %}
+        <li>No comments yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Uploads Section -->
+  <div class="profile-section">
+    <h3>Your Uploads</h3>
+    <ul class="upload-list">
+      {% for content in user_uploads %}
+        <li>
+          {% if content.FilePath.endswith('.jpg') or content.FilePath.endswith('.png') or content.FilePath.endswith('.jpeg') %}
+            <img src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" alt="Upload" class="upload-thumb">
+          {% else %}
+            <span>{{ content.FilePath }}</span>
+          {% endif %}
+          <small>{{ content.UploadDate.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+          <form action="{{ url_for('delete_upload', content_id=content.ContentID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this upload?');">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      {% else %}
+        <li>You haven't uploaded anything yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Logout -->
+  <div class="logout-wrapper">
+    <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+
+</div>
+{% endblock %}

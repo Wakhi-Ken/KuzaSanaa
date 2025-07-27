@@ -1,0 +1,187 @@
+:root {
+  --brown-dark: #4b2e05;        /* dark brown */
+  --brown-medium: #7f551a;      /* medium brown */
+  --brown-light: #c8a165;       /* light brown */
+  --cream-light: #f7f1e1;       /* cream/light beige */
+  --text-color: #3b2f2f;        /* dark text */
+  --shadow-color: rgba(0, 0, 0, 0.12);
+  --font-family: 'Poppins', sans-serif;
+  --border-radius: 0.75rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+body {
+  background-image: url('https://img.freepik.com/premium-photo/banner-with-beautiful-black-woman-female-portrait-young-african-american-with-beautiful-face_972324-69975.jpg?semt=ais_hybrid&w=740');
+  background-size: cover;         /* Make sure image covers entire viewport */
+  background-position: center;    /* Center the image */
+  background-repeat: no-repeat;   /* Don't repeat the image */
+  background-attachment: fixed;   /* Fix the background while scrolling */
+  /* Optional: add a fallback background color */
+  background-color: #d7b899;      /* light brown as fallback */
+}
+
+.container {
+  width: 100%;
+  max-width: 460px;
+  background: var(--cream-light);
+  border-radius: var(--border-radius);
+  box-shadow: 0 6px 18px var(--shadow-color);
+  padding: 2.5rem 2rem;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  color: var(--brown-dark);
+  text-align: center;
+}
+
+.highlight {
+  color: var(--brown-medium);
+}
+
+.opacity {
+  opacity: 0.85;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1.8px solid var(--brown-medium);
+  border-radius: var(--border-radius);
+  background-color: var(--cream-light);
+  color: var(--brown-dark);
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brown-dark);
+  box-shadow: 0 0 8px var(--brown-medium);
+  background-color: #fff8e1;
+}
+
+.password-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.password-row input {
+  flex-grow: 1;
+}
+
+.toggle-password-btn {
+  background: var(--brown-medium);
+  border: none;
+  border-radius: var(--border-radius);
+  color: var(--cream-light);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  transition: background-color 0.25s ease;
+  user-select: none;
+}
+
+.toggle-password-btn:hover {
+  background: var(--brown-dark);
+}
+
+button[type="submit"] {
+  background-color: var(--brown-dark);
+  color: var(--cream-light);
+  font-weight: 700;
+  padding: 0.75rem 1.2rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--brown-medium);
+}
+
+.register-forget {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.register-forget a {
+  color: var(--brown-dark);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.register-forget a:hover {
+  color: var(--brown-medium);
+  text-decoration: underline;
+}
+
+.flashes {
+  list-style: none;
+  background: #fce4d6;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  color: #a94f0d;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+#password-strength {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brown-medium);
+  margin-top: -1rem;
+  margin-bottom: 0.75rem;
+  min-height: 1.1rem;
+  text-align: right;
+}
+
+/* Responsive */
+
+@media (max-width: 520px) {
+  body {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  button[type="submit"] {
+    font-size: 1rem;
+  }
+}
