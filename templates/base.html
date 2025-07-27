@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
   
-  <!-- Expose login status to JS -->
+  <!-- Expose login status to JavaScript -->
   <script>
     window.isUserLoggedIn = {{ 'true' if 'user_id' in session else 'false' }};
   </script>
@@ -18,12 +18,13 @@
   {% block extra_css %}{% endblock %}
 
   <style>
-    /* Style to keep logo link neat */
+    /* Keep the logo link clean and accessible */
     .logo a {
       color: inherit;
       text-decoration: none;
       cursor: pointer;
     }
+    /* Add underline on hover/focus for better interactivity */
     .logo a:hover,
     .logo a:focus {
       text-decoration: underline;
@@ -34,24 +35,29 @@
 <body>
   <header class="site-header">
     <div class="container">
+      <!-- Main site logo -->
       <h1 class="logo"><a href="/">KuzaSanaa</a></h1>
 
-      <!-- Hamburger button -->
+      <!-- Hamburger menu button for mobile nav -->
       <div class="hamburger" id="hamburger" aria-label="Toggle navigation" tabindex="0" role="button">
         <span></span>
         <span></span>
         <span></span>
       </div>
 
+      <!-- Navigation menu -->
       <nav>
         <ul class="nav-list {% if 'user_id' in session %}js-hidden{% endif %}" id="nav-list">
           {% if 'user_id' in session %}
+            <!-- Show these links if user is logged in -->
             <li><a href="/">Home</a></li>
             <li><a href="/campaigns">Campaigns</a></li>
             <li><a href="/media">Podcasts & Docs</a></li>
             <li><a href="/upload">Upload</a></li>
             <li><a href="{{ url_for('profile') }}">My Profile</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+            <!-- Search toggle and input inside nav -->
             <li class="search-container" id="search-container" tabindex="0" role="button" aria-label="Toggle search">
               <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.14 5.59 12.53 3 9.25 3S3.36 5.59 3.36 8.39c0 2.79 2.6 5.39 5.89 5.39 1.31 0 2.5-.51 3.38-1.34l.27.28v.79l4.25 4.25 1.5-1.5-4.25-4.25zm-6.25 0c-1.8 0-3.25-1.45-3.25-3.25S7.45 7.5 9.25 7.5 12.5 8.95 12.5 10.75 11.05 14 9.25 14z"/>
@@ -66,7 +72,9 @@
                 onkeydown="if(event.key === 'Enter'){ performSearch(); }"
               />
             </li>
+
           {% else %}
+            <!-- Show these links if user is not logged in -->
             <li><a href="{{ url_for('login') }}">Login</a></li>
             <li><a href="{{ url_for('register') }}">Register</a></li>
           {% endif %}
@@ -74,6 +82,7 @@
       </nav>
     </div>
 
+    <!-- Flash messages for user feedback -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class="flashes">
@@ -94,6 +103,7 @@
   </footer>
 
   <script>
+    // Show nav menu on page load if user is logged in
     document.addEventListener('DOMContentLoaded', () => {
       const navList = document.getElementById('nav-list');
       if (window.isUserLoggedIn === true || window.isUserLoggedIn === 'true') {
@@ -102,30 +112,36 @@
       }
     });
 
+    // Hamburger and nav elements for toggling menu visibility
     const hamburger = document.getElementById('hamburger');
     const navList = document.getElementById('nav-list');
     const searchContainer = document.getElementById('search-container');
     const searchInput = document.getElementById('search-input');
 
+    // Toggle nav menu open/close
     function toggleMenu() {
       navList.classList.toggle('active');
       hamburger.classList.toggle('active');
+      // Hide search input when nav closes
       if (searchInput && searchInput.style.display === 'block') {
         searchInput.style.display = 'none';
       }
     }
 
+    // Hamburger click and keyboard interaction
     hamburger.addEventListener('click', toggleMenu);
     hamburger.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' || e.key === ' ') toggleMenu();
     });
 
+    // Close nav menu when a nav link is clicked (mobile-friendly)
     document.querySelectorAll('.nav-list a').forEach(link => {
       link.addEventListener('click', () => {
         if (navList.classList.contains('active')) toggleMenu();
       });
     });
 
+    // Toggle search input visibility on search icon click or keyboard
     if (searchContainer) {
       searchContainer.addEventListener('click', () => {
         if (searchInput.style.display === 'block') {
@@ -149,21 +165,25 @@
       });
     }
 
+    // Hide search input when clicking outside the search container
+    document.addEventListener('click', (e) => {
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        if (searchInput) searchInput.style.display = 'none';
+      }
+    });
+
+    // Perform search on pressing Enter in search input
     function performSearch() {
       const query = searchInput.value.trim();
       if (query.length > 0) {
         window.location.href = `/search?q=${encodeURIComponent(query)}`;
       }
     }
-
-    document.addEventListener('click', (e) => {
-      if (searchContainer && !searchContainer.contains(e.target)) {
-        if (searchInput) searchInput.style.display = 'none';
-      }
-    });
   </script>
 
+  <!-- Extra JS block for page-specific scripts -->
   {% block extra_js %}{% endblock %}
 </body>
 </html>
+
 

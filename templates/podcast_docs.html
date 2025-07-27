@@ -3,35 +3,50 @@
 
 {% block content %}
 <section class="media-section">
+  {# Section heading #}
   <h2 class="section-title">Podcasts & Documentaries</h2>
 
   <div class="media-grid">
+    {# Loop through each media item #}
     {% for item in media %}
       <div class="media-card">
+
+        {# Display media preview based on type #}
         {% if item.media_type == 'video' %}
           <video controls class="media-preview">
             <source src="{{ url_for('static', filename='uploads/' ~ item.file_path) }}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
+
         {% elif item.media_type == 'image' %}
           <img src="{{ url_for('static', filename='uploads/' ~ item.file_path) }}" alt="{{ item.title }}" class="media-preview">
+
         {% elif item.media_type == 'text' %}
+          {# Show title and short description preview for text media #}
           <div class="text-preview">
             <h3>{{ item.title }}</h3>
             <p>{{ item.description[:200] }}{% if item.description|length > 200 %}...{% endif %}</p>
           </div>
         {% endif %}
 
+        {# Info about the media below the preview #}
         <div class="media-info">
           <h3>{{ item.title }}</h3>
+
+          {# Show short description if available and not text media (to avoid duplicate) #}
           {% if item.description and item.media_type != 'text' %}
             <p class="media-description">{{ item.description[:100] }}{% if item.description|length > 100 %}...{% endif %}</p>
           {% endif %}
+
+          {# Uploader username and role #}
           <p><strong>Uploaded by:</strong> {{ item.uploader.Username }} ({{ item.uploader.Role }})</p>
+
+          {# Upload date formatted nicely #}
           <p class="upload-date">{{ item.upload_date.strftime('%B %d, %Y') }}</p>
         </div>
       </div>
     {% else %}
+      {# Message if no media found #}
       <p>No podcasts or documentaries uploaded yet.</p>
     {% endfor %}
   </div>

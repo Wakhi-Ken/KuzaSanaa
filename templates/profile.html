@@ -2,7 +2,8 @@
 {% block title %}{{ user.Username }}'s Profile | KuzaSanaa{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+  {# Link to custom CSS for profile page #}
+  <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -18,6 +19,7 @@
 
     <!-- Profile Picture -->
     <div class="profile-photo">
+      {# Show user profile pic if uploaded, else fallback to default avatar #}
       {% if user.ProfilePicture %}
         <img src="{{ url_for('static', filename='profile_pics/' ~ user.ProfilePicture) }}" alt="Profile Picture">
       {% else %}
@@ -32,6 +34,7 @@
 
     <div class="info-group">
       <h3>Bio</h3>
+      {# Show bio if set, else prompt no bio yet #}
       {% if user.Bio %}
         <p class="bio-text">{{ user.Bio }}</p>
       {% else %}
@@ -41,11 +44,12 @@
 
     <!-- Bio Update Form -->
     <form action="{{ url_for('profile') }}" method="POST">
+      {# Textarea pre-filled with current bio or empty #}
       <textarea name="bio" placeholder="Write something about yourself...">{{ user.Bio or '' }}</textarea>
       <button type="submit">Update Bio</button>
     </form>
 
-    <!-- Flash messages -->
+    <!-- Flash messages for success/error feedback -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class="flashes">
@@ -62,12 +66,14 @@
   <div class="profile-section">
     <h3>Your Comments</h3>
     <ul class="comment-list">
+      {# Loop user’s comments, show text and date #}
       {% for comment in user.comments %}
         <li>
           <p>{{ comment.CommentText }}</p>
           <small>{{ comment.CommentDate.strftime('%Y-%m-%d %H:%M:%S') }}</small>
         </li>
       {% else %}
+        {# Show if no comments yet #}
         <li>No comments yet.</li>
       {% endfor %}
     </ul>
@@ -79,23 +85,27 @@
     <ul class="upload-list">
       {% for content in user_uploads %}
         <li>
+          {# Show thumbnail if image, else just file name #}
           {% if content.FilePath.endswith('.jpg') or content.FilePath.endswith('.png') or content.FilePath.endswith('.jpeg') %}
             <img src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" alt="Upload" class="upload-thumb">
           {% else %}
             <span>{{ content.FilePath }}</span>
           {% endif %}
+          {# Upload timestamp #}
           <small>{{ content.UploadDate.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+          {# Delete button with confirmation prompt #}
           <form action="{{ url_for('delete_upload', content_id=content.ContentID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this upload?');">
             <button type="submit">Delete</button>
           </form>
         </li>
       {% else %}
+        {# Message if no uploads #}
         <li>You haven't uploaded anything yet.</li>
       {% endfor %}
     </ul>
   </div>
 
-  <!-- Logout -->
+  <!-- Logout link -->
   <div class="logout-wrapper">
     <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
   </div>

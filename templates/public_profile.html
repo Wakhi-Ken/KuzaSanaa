@@ -2,46 +2,69 @@
 {% block title %}{{ user.Username }} | KuzaSanaa{% endblock %}
 
 {% block extra_css %}
+  {# Link to CSS specific for public profile page #}
   <link rel="stylesheet" href="{{ url_for('static', filename='public_profile.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="public-profile-container">
+  {# Header showing the username’s public profile #}
   <div class="public-header">{{ user.Username }}'s Public Profile</div>
+
+  {# Display user role or fallback text #}
   <div class="user-role"><strong>Role:</strong> {{ user.Role or "Not specified" }}</div>
+
+  {# Display user bio or fallback message #}
   <div class="user-bio">
     {{ user.Bio or "No bio provided yet." }}
   </div>
 
+  {# Section listing user uploads #}
   <div class="uploads-section">
     <h3>Uploads</h3>
+
+    {# Check if user has uploads #}
     {% if uploads %}
+      {# Loop through each upload #}
       {% for content in uploads %}
         <div class="upload-item">
+          {# Show file name #}
           <p><strong>File:</strong> {{ content.FilePath }}</p>
+          {# Show upload timestamp formatted nicely #}
           <p><small>Uploaded on: {{ content.UploadDate.strftime('%Y-%m-%d %H:%M:%S') }}</small></p>
 
+          {# Extract file extension to determine how to display #}
           {% set ext = content.FilePath.split('.')[-1].lower() %}
+
+          {# Audio preview if supported format #}
           {% if ext in ['mp3', 'wav', 'ogg'] %}
             <audio controls>
               <source src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" type="audio/{{ ext }}">
               Your browser does not support audio playback.
             </audio>
+
+          {# Video preview if supported format #}
           {% elif ext in ['mp4', 'webm'] %}
             <video controls width="100%">
               <source src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" type="video/{{ ext }}">
               Your browser does not support video playback.
             </video>
+
+          {# Image preview if supported format #}
           {% elif ext in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
             <img src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" alt="Upload image" style="max-width:100%; border-radius:8px; margin-top:8px;" />
+
+          {# For unsupported file types, fallback message #}
           {% else %}
             <p>Preview not available for this file type.</p>
           {% endif %}
         </div>
       {% endfor %}
     {% else %}
+      {# Message if no uploads found #}
       <p>This user hasn’t uploaded anything yet.</p>
     {% endif %}
   </div>
 </div>
 {% endblock %}
+

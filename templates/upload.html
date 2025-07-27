@@ -2,18 +2,31 @@
 {% block title %}Upload a File | KuzaSanaa{% endblock %}
 
 {% block extra_css %}
+  {# Link to specific CSS for upload page styling #}
   <link rel="stylesheet" href="{{ url_for('static', filename='upload.css') }}">
 {% endblock %}
 
 {% block content %}
   <div class="upload-form-wrapper">
     <h1>Upload a File</h1>
+    {# Form to upload a file; multipart needed for file uploads #}
     <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" aria-label="File upload form">
+      
+      {# Hidden input with user id if needed on server side #}
       <input type="hidden" name="user_id" value="{{ user_id }}">
+
+      {# Label for screen readers only #}
       <label for="file-input" class="sr-only">Choose file to upload</label>
+
+      {# File input, required for form submission #}
       <input type="file" id="file-input" name="file" required aria-required="true" aria-describedby="fileHelp">
+
+      {# Helper text showing allowed file types #}
       <small id="fileHelp">Supported formats: audio, video, images, and documents.</small>
+
+      {# Submit button #}
       <button type="submit">Upload</button>
     </form>
   </div>
 {% endblock %}
+

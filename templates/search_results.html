@@ -2,6 +2,7 @@
 {% block title %}Search Results for "{{ query }}" | KuzaSanaa{% endblock %}
 
 {% block extra_css %}
+  {# Custom CSS just for search results page #}
   <link rel="stylesheet" href="{{ url_for('static', filename='search_results.css') }}">
 {% endblock %}
 
@@ -11,19 +12,27 @@
 
     <section class="uploads-section" aria-label="Search results: users and their uploads">
       <h3>Users and their uploads</h3>
+
+      {# Check if we got any users matching the search #}
       {% if users %}
         <ul>
+          {# Loop through each found user #}
           {% for user in users %}
             <li>
+              {# Link to the public profile of this user #}
               <a href="{{ url_for('public_profile', user_id=user.UserID) }}" class="accent-link" aria-label="View {{ user.Username }}'s profile">
                 {{ user.Username }} ({{ user.Role or "Role not specified" }})
               </a>
 
+              {# Filter uploads list to only those belonging to current user #}
               {% set user_uploads = uploads | selectattr("user.UserID", "equalto", user.UserID) | list %}
+
+              {# If this user has uploads, list them here #}
               {% if user_uploads %}
                 <ul>
                   {% for upload in user_uploads %}
                     <li>
+                      {# Link to the uploader's profile again, label includes file name #}
                       <a href="{{ url_for('public_profile', user_id=upload.user.UserID) }}" class="accent-link" aria-label="View upload {{ upload.FilePath }}">
                         {{ upload.FilePath }}
                       </a>
@@ -31,14 +40,17 @@
                   {% endfor %}
                 </ul>
               {% else %}
+                {# Message when user has no uploads #}
                 <p><em>No uploads for this user.</em></p>
               {% endif %}
             </li>
           {% endfor %}
         </ul>
       {% else %}
+        {# No users found at all #}
         <p>No users found.</p>
       {% endif %}
     </section>
   </div>
 {% endblock %}
+

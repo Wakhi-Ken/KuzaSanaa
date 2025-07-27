@@ -2,44 +2,57 @@
 {% block title %}Join MUS-HUB{% endblock %}
 
 {% block extra_css %}
+  {# Specific CSS for register page #}
   <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+  {# Import Poppins font for clean typography #}
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <div class="container">
   <div class="register-container">
+    {# Decorative circles for style #}
     <div class="circle circle-one"></div>
     <div class="circle circle-two"></div>
 
     <div class="form-container" role="main" aria-label="User Registration Form">
       <h1>Welcome to <span class="highlight">MUS-HUB</span></h1>
+
+      {# Intro paragraph explaining the platform #}
       <p class="opacity">
         🎨 <strong>KuzaSanaa </strong> is the vibrant platform where <strong>creative talents and culture enthusiasts come together</strong>.  
         Showcase your artistry, share cultural stories, and engage with a community passionate about arts, heritage, and digital media.  
         Whether you’re a cultural strategist, artist, or admirer, <em>this is your stage to inspire and be inspired</em>.        
       </p>
 
+      {# Registration form, POST method to register route, no native HTML validation (novalidate) #}
       <form method="POST" action="{{ url_for('register') }}" novalidate>
+
+        {# Username input with accessible label for screen readers #}
         <label for="register-username" class="sr-only">Username</label>
         <input type="text" id="register-username" name="username" placeholder="Username" required aria-required="true" aria-describedby="usernameHelp">
 
+        {# Email input, also required #}
         <label for="register-email" class="sr-only">Email address</label>
         <input type="email" id="register-email" name="email" placeholder="Email" required aria-required="true" aria-describedby="emailHelp">
 
+        {# Password input row with toggle visibility button #}
         <div class="password-row">
           <label for="register-password" class="sr-only">Password</label>
           <input type="password" id="register-password" name="password" placeholder="Password" required aria-required="true" aria-describedby="passwordHelp">
           <button type="button" id="togglePassword" aria-label="Show or hide password" class="toggle-password-btn">Show</button>
         </div>
+        {# Password strength feedback container, updated live #}
         <div id="password-strength" aria-live="polite" role="status"></div>
 
+        {# Confirm password input with its own toggle button #}
         <div class="password-row">
           <label for="confirm-password" class="sr-only">Confirm Password</label>
           <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required aria-required="true" aria-describedby="confirmPasswordHelp">
           <button type="button" id="toggleConfirmPassword" aria-label="Show or hide confirm password" class="toggle-password-btn">Show</button>
         </div>
 
+        {# Dropdown for selecting user role, with accessible label #}
         <label for="register-role">Select your role</label>
         <select id="register-role" name="role" required aria-required="true" aria-describedby="roleHelp">
           <option value="" disabled selected>Select your role</option>
@@ -65,13 +78,16 @@
           <option value="Enthusiast">Enthusiast</option>
         </select>
 
+        {# Link to login page if user already has an account #}
         <div class="register-forget" style="margin-top:1rem;">
           <a href="{{ url_for('login') }}">Already have an account? Login</a>
         </div>
 
+        {# Submit button #}
         <button type="submit">Create Profile</button>
       </form>
 
+      {# Flash messages for feedback (errors, success, etc.) #}
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           <ul class="flashes" role="alert">
@@ -89,6 +105,7 @@
 {% block scripts %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Toggle password visibility for main password input
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('register-password');
 
@@ -98,6 +115,7 @@
       togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
     });
 
+    // Toggle password visibility for confirm password input
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
     const confirmPasswordInput = document.getElementById('confirm-password');
 
@@ -107,25 +125,23 @@
       toggleConfirmPassword.textContent = type === 'password' ? 'Show' : 'Hide';
     });
 
-    // Password strength checker
+    // Simple password strength indicator logic
     const strengthText = document.getElementById('password-strength');
     passwordInput.addEventListener('input', () => {
       const val = passwordInput.value;
       let strength = '';
       if(val.length < 6) {
         strength = 'Too short';
-        strengthText.style.color = '#ff3e36';
+        strengthText.style.color = '#ff3e36';  // Red for weak
       } else if(val.match(/[A-Z]/) && val.match(/[0-9]/) && val.length >= 8) {
         strength = 'Strong password';
-        strengthText.style.color = '#4CAF50';
+        strengthText.style.color = '#4CAF50';  // Green for strong
       } else {
         strength = 'Weak password, include uppercase letters and numbers';
-        strengthText.style.color = '#ff9800';
+        strengthText.style.color = '#ff9800';  // Orange for medium
       }
-      strengthText.textContent = val ? strength : '';
+      strengthText.textContent = val ? strength : '';  // Clear if empty
     });
   });
 </script>
 {% endblock %}
-
-

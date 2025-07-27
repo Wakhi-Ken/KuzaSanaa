@@ -2,9 +2,14 @@
 {% block title %}KuzaSanaa | Home{% endblock %}
 
 {% block extra_css %}
+  {# Main CSS for the homepage #}
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+  {# Google font Poppins for consistent typography #}
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+  {# Inline styles for icon animations and uploaded image styling #}
   <style>
+    /* Icon styling and smooth bounce animation */
     .icon {
       width: 20px;
       height: 20px;
@@ -23,6 +28,7 @@
       100% { transform: translateY(0) scale(1); }
     }
 
+    /* Uploaded image styling with hover scale effect */
     .uploaded-image {
       max-width: 100%;
       border-radius: 10px;
@@ -38,11 +44,16 @@
 
 {% block content %}
 
+{# Semi-transparent overlay for visual depth (optional) #}
 <div class="image-overlay"></div>
 
 <div class="container">
+
+  {# Show this block only if user is logged in (session contains user_id) #}
   {% if 'user_id' in session %}
     <h2>Welcome, {{ username }}!</h2>
+
+    {# Link to user's profile with an animated user icon #}
     <a href="{{ url_for('profile') }}" class="profile-link" aria-label="Go to your profile">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
@@ -50,6 +61,7 @@
       Go to Profile
     </a>
 
+    {# Display any flash messages (like notifications, success, or errors) #}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class="flashes" role="alert">
@@ -61,8 +73,11 @@
     {% endwith %}
 
     <h2>Latest Uploads</h2>
+
+    {# Loop over the latest uploaded content #}
     {% for content in contents %}
       <div class="upload" role="region" aria-labelledby="upload-title-{{ content.ContentID }}">
+        {# Display uploader info with link to their public profile #}
         <p><strong>By:</strong> 
           <a href="{{ url_for('public_profile', user_id=content.user.UserID) }}">
             {{ content.user.Username }}
@@ -71,18 +86,22 @@
         <p><strong>Uploaded:</strong> {{ content.UploadDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
         <p><strong>File:</strong> {{ content.FilePath }}</p>
 
+        {# Determine file extension to show appropriate media preview #}
         {% set ext = content.FilePath.split('.')[-1].lower() %}
         {% if ext in ['mp3', 'wav', 'ogg'] %}
+          {# Audio player for audio files #}
           <audio controls>
             <source src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" type="audio/{{ ext }}">
             Your browser does not support audio playback.
           </audio>
         {% elif ext in ['mp4', 'webm'] %}
+          {# Video player for video files #}
           <video controls width="360" aria-labelledby="upload-title-{{ content.ContentID }}">
             <source src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}" type="video/{{ ext }}">
             Your browser does not support video playback.
           </video>
         {% elif ext in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
+          {# Image preview for image files #}
           <img src="{{ url_for('static', filename='uploads/' ~ content.FilePath) }}"
                alt="Image uploaded by {{ content.user.Username }}"
                class="uploaded-image" />
@@ -90,6 +109,7 @@
           <p>Preview not available for this file type.</p>
         {% endif %}
 
+        {# Button toggles the visibility of comments section, with aria attributes for accessibility #}
         <button 
           aria-expanded="false" 
           aria-controls="comments-{{ content.ContentID }}" 
@@ -101,6 +121,7 @@
           Comments
         </button>
 
+        {# Comments section initially hidden #}
         <div id="comments-{{ content.ContentID }}" class="comment-section" style="display: none;">
           <h4 id="upload-title-{{ content.ContentID }}">Comments:</h4>
           <ul>
@@ -111,6 +132,7 @@
                     {{ comment.user.Username }}
                   </a>
                 </strong>:
+                {# Allow editing only if current user wrote comment and it's recent (<30 sec) #}
                 {% if (current_user_id == comment.UserID) and ((now - comment.CommentDate).total_seconds() < 30) %}
                   <form action="{{ url_for('edit_comment', comment_id=comment.CommentID) }}" method="POST" style="display:inline;">
                     <input type="text" name="comment_text" value="{{ comment.CommentText }}" aria-label="Edit comment">
@@ -124,6 +146,7 @@
             {% endfor %}
           </ul>
 
+          {# Form to add new comment #}
           <form action="{{ url_for('add_comment', content_id=content.ContentID) }}" method="POST">
             <textarea name="comment_text" placeholder="Leave a comment..." required aria-label="Leave a comment"></textarea>
             <button type="submit" class="submit-comment-btn">
@@ -137,6 +160,7 @@
       </div>
     {% endfor %}
 
+    {# JS to handle comment section toggle and animate icons on interaction #}
     <script>
       function toggleComments(id, btn) {
         const section = document.getElementById(id);
@@ -147,11 +171,12 @@
         const icon = btn.querySelector('.icon');
         if(icon) {
           icon.classList.remove('animate');
-          void icon.offsetWidth;
+          void icon.offsetWidth; // trigger reflow to restart animation
           icon.classList.add('animate');
         }
       }
 
+      // Animate submit comment icons on click
       document.querySelectorAll('.submit-comment-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const icon = btn.querySelector('.icon');
@@ -163,6 +188,7 @@
         });
       });
 
+      // Animate profile icon on hover/focus for better UX
       const profileLink = document.querySelector('.profile-link');
       if(profileLink) {
         const icon = profileLink.querySelector('.icon');
@@ -174,11 +200,12 @@
     </script>
 
   {% else %}
+    {# Show this summary if user is NOT logged in #}
     <section class="web-summary" role="region" aria-label="About KuzaSanaa">
       <p>
         🎨 <strong>KuzaSanaa </strong> is the vibrant platform where <strong>creative talents and culture enthusiasts come together</strong>.  
-Showcase your artistry, share cultural stories, and engage with a community passionate about arts, heritage, and digital media.  
-Whether you’re a cultural strategist, artist, or admirer, <em>this is your stage to inspire and be inspired</em>.
+        Showcase your artistry, share cultural stories, and engage with a community passionate about arts, heritage, and digital media.  
+        Whether you’re a cultural strategist, artist, or admirer, <em>this is your stage to inspire and be inspired</em>.
       </p>
     </section>
   {% endif %}
