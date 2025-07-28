@@ -4,8 +4,9 @@ A creative hub for artists, cultural leaders, and storytellers across Africa.
 🔗 Platform Link: KuzaSanaa kuzasanaa.onrender.com
 
 #Screen Shots Home Page
-[media pointer="file-service://file-GgfSsdQai3qpaChcxWqeRg"]
-[media pointer="file-service://file-BHWAdfwP8woyHJzQFuSRGi"]
+<img width="1362" height="675" alt="image" src="https://github.com/user-attachments/assets/99231aac-8d67-4f1b-a71e-86dedbc88f4b" />
+<img width="1352" height="601" alt="image" src="https://github.com/user-attachments/assets/b0fe630f-ed77-494c-9c9f-6f269038fbc7" />
+
 
 
 
