@@ -1,7 +1,7 @@
 🎨 KuzaSanaa – Empowering Culture Digitally
 A creative hub for artists, cultural leaders, and storytellers across Africa.
 
-🔗 Platform Link: KuzaSanaa [https://kuzasanaa.onrender.com/](url)
+🔗 Platform Link: KuzaSanaa [https://kuzasanaa.onrender.com/]([https://kuzasanaa.onrender.com/])
 
 #Screen Shots Home Page
 <img width="1362" height="675" alt="image" src="https://github.com/user-attachments/assets/99231aac-8d67-4f1b-a71e-86dedbc88f4b" />
